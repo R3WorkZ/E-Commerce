@@ -1,7 +1,7 @@
 {
-  "name": "node-ecommerce",
+  "name": "ecommerce",
   "version": "1.0.0",
-  "description": "",
+  "description": "Ecommerce Backend for MongoDB",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
     "nodemon": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Reniyal",
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
