@@ -39,7 +39,7 @@ build/Release
 
 # others
 public/
-*.timetracker
+.timetracker
 
 # Dependency directories
 node_modules/
