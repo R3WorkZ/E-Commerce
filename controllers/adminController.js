@@ -20,7 +20,9 @@ exports.signUp = async (req, res, next) => {
   try {
     const newAdmin = await createAdmin(req);
     const savedAdmin = await newAdmin.save(); 
-    return res.status(200).send({ success: true, message: "Admin A/C created successfully!", user: savedAdmin  });
+    const token = await jwt.sign({ _id: foundAdmin._id }, MASTER_KEY);
+    
+    return res.status(200).send({ success: true, message: "Admin A/C created successfully!", "admin-token": token, adminId:savedAdmin._id, user: savedAdmin  });
   } catch (error) {
     return res.status(400).send({ success: false, message: "Admin A/C  Creation Failed!", error: err });
   }
