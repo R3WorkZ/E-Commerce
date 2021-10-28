@@ -15,14 +15,14 @@ exports.signUp = async (req, res, next) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const emailExist = await Admin.findOne({ email: req.body.email });
-  if (emailExist) return res.status(400).send("email  already exist");
+  if (emailExist) return res.status(400).send({ success: false, message: "Email already exist!" });
 
   try {
     const newAdmin = await createAdmin(req);
     const savedAdmin = await newAdmin.save(); 
-    return res.status(200).send({ message: "User created successfully!", user: savedAdmin  });
+    return res.status(200).send({ success: true, message: "Admin A/C created successfully!", user: savedAdmin  });
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(400).send({ success: false, message: "Admin A/C  Creation Failed!", error: err });
   }
 };
 
@@ -32,18 +32,18 @@ exports.logIn = async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const foundAdmin = await Admin.findOne({ email: req.body.email }); //returns the first document that matches the query criteria or null
-  if (!foundAdmin) return res.status(400).send({ message: "Email is not found" });
+  if (!foundAdmin) return res.status(400).send({ success: false, message: "Email is not found" });
 
   try {
     const isMatch = await bcrypt.compareSync(req.body.password, foundAdmin.password);
-    if (!isMatch) return res.status(400).send({ message: "invalid password" });
+    if (!isMatch) return res.status(400).send({ success: false, message: "invalid password" });
 
     // create and assign jwt
     const token = await jwt.sign({ _id: foundAdmin._id }, MASTER_KEY);
     
-    return res.status(200).header("admin-token", token).send({ "admin-token": token });
+    return res.status(200).header("admin-token", token).send({success: true, "admin-token": token, adminId: foundAdmin._id });
   } catch (error) {
-    return res.status(400).send(error);
+    return res.status(400).send({ success: false, message: error });
   }
 };
 // Update admin
