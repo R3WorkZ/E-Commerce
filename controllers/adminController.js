@@ -48,6 +48,21 @@ exports.logIn = async (req, res) => {
     return res.status(400).send({ success: false, message: error });
   }
 };
+
+// Fetch Profile
+exports.profile = async (req, res) => {
+  try{
+    const foundAdmin = await Admin.findById({_id:req.params.userId});
+    if(!foundAdmin){
+      return res.status(400).send({ success:false, message: "User Not Found" });
+    }
+    return res.status(200).send({foundAdmin});
+  }
+  catch(error){
+    
+    return res.status(400).send({ success: false, message: error });
+  }
+};
 // Update admin
 exports.updateAdmin = async (req, res) => {
   try {
@@ -87,6 +102,7 @@ exports.data = async (req, res) => {
     },
   });
 };
+
 
 async function createAdmin(req) {
   const hashPassword = await bcrypt.hashSync(req.body.password, 10);

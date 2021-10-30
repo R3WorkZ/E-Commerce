@@ -13,6 +13,8 @@ router.delete('/:userId', adminController.deleteAdmin); //delete admin
 
 router.delete('/user/:userId', userController.deleteUser); //delete user
 
+router.get("/profile", verifyAdmin, adminController.data)
+
 router.get("/data", verifyAdmin, adminController.data)
 
 module.exports = router;
