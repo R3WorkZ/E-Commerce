@@ -54,7 +54,7 @@ exports.profile = async (req, res) => {
   try{
     const profileData = await Admin.findById({_id:req.params.userId});
     if(!profileData){
-      return res.status(400).send({ success:false, message: "User Not Found" });
+      return res.status(400).send({ success:false, message: "Admin Not Found" });
     }
     return res.status(200).send(profileData);
   }
@@ -71,12 +71,12 @@ exports.updateAdmin = async (req, res) => {
     const updatedAdmin = await Admin.findByIdAndUpdate(req.params.userId, { $set: req.body }, { new: true });
 
     if (!updatedAdmin) {
-      return res.status(400).send({ message: "Could not update user" });
+      return res.status(400).send({ message: "Could not update. Retry." });
     }
     return res.status(200).send({ message: "User updated successfully", updatedUser});
 
   } catch (error) {
-    return res.status(400).send({ error: "An error has occurred, unable to update user" });
+    return res.status(400).send({ success: false, message: error });
   }
 };
 
@@ -90,17 +90,21 @@ exports.deleteAdmin = async (req, res) => {
     }
     return res.status(200).send({ message: "User deleted successfully", user: deletedAdmin});
   } catch (error) {
-    return res.status(400).send({ error: "An error has occurred, unable to delete user" });
+    return res.status(400).send({ success: false, message: error });
   }
 };
 
 exports.data = async (req, res) => {
-  return res.json({
-    posts: {
-      title: "Admin Authentication",
-      discription: "random data you can access because you\'re authenticated",
-    },
-  });
+  try{
+    const allAdmin = await Admin;
+    return res.json({
+      allAdmin,
+      posts: {
+        title: "Admin Authentication",
+        discription: "random data you can access because you\'re authenticated",
+      },
+    });
+  }catch (error){}
 };
 
 
