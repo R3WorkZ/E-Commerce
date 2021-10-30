@@ -52,11 +52,11 @@ exports.logIn = async (req, res) => {
 // Fetch Profile
 exports.profile = async (req, res) => {
   try{
-    const foundAdmin = await Admin.findById({_id:req.params.userId});
-    if(!foundAdmin){
+    const profileData = await Admin.findById({_id:req.params.userId});
+    if(!profileData){
       return res.status(400).send({ success:false, message: "User Not Found" });
     }
-    return res.status(200).send({foundAdmin});
+    return res.status(200).send(profileData);
   }
   catch(error){
     
