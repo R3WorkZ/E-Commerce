@@ -96,7 +96,7 @@ exports.deleteAdmin = async (req, res) => {
 
 exports.data = async (req, res) => {
   try{
-    const allAdmin = await Admin;
+    const allAdmin = await Admin.find();
     return res.json({
       allAdmin,
       posts: {
