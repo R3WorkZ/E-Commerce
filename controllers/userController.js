@@ -47,21 +47,40 @@ exports.logIn = async (req, res) => {
   }
 };
 
+// Fetch Profile
+exports.profile = async (req, res) => {
+  try{
+    const profileData = await User.findById({_id:req.params.userId});
+    if(!profileData){
+      return res.status(400).send({ success:false, message: "User Not Found" });
+    }
+    return res.status(200).send(profileData);
+  }
+  catch(error){
+    
+    return res.status(400).send({ success: false, message: "Error",error:error });
+  }
+};
+
 // Update user
 exports.updateUser = async (req, res) => {
   try {
     if(req.body.password!=null){
-      req.body.password = bcrypt.hashSync(req.body.password, 10);
-    } //encrypt the password before updating
+      req.body.password = bcrypt.hashSync(req.body.password, 10); //encrypt the password before updating
+    }
+    const emailExist = await User.findOne({ email: req.body.email });
+    if (emailExist){ 
+      return res.status(400).send({ success: false, message: "A User with the same Email already exists! Try another one." });
+    }
     const updatedUser = await User.findByIdAndUpdate(req.params.userId, { $set: req.body }, { new: true });
 
     if (!updatedUser) {
-      return res.status(400).send({ message: "Could not update user" });
+      return res.status(400).send({success: false, message: "Could not update user" });
     }
-    return res.status(200).send({ message: "User updated successfully", updatedUser });
+    return res.status(200).send({success: true, message: "Successfully updated", updatedUser });
 
   } catch (error) {
-    return res.status(400).send({ error: "An error has occurred, unable to update user" + error });
+    return res.status(400).send({success: false, message: "An error has occurred, unable to update user", error: error });
   }
 };
 
@@ -71,23 +90,21 @@ exports.deleteUser = async (req, res) => {
     const deletedUser = await User.findByIdAndDelete(req.params.userId); // the `await` is very important here!
 
     if (!deletedUser) {
-      return res.status(400).send({ message: "Could not delete user" });
+      return res.status(400).send({success: false, message: "Could not delete user" });
     }
-    return res.status(200).send({ message: "User deleted successfully", user: deletedUser });
+    return res.status(200).send({success: true, message: "User deleted successfully", user: deletedUser });
   } catch (error) {
-    return res.status(400).send({ error: "An error has occurred, unable to delete user" });
+    return res.status(400).send({success: false, message: "An error has occurred, unable to delete user", error:error });
   }
 };
 
-exports.data = async (req, res) => {
-  const data= await User.findById(req.params.userId)
-  return res.json({
-    status: true,
-    message: {
-      title: "User Authentication",
-      description: data,
-    },
-  });
+exports.viewAllUsers = async (req, res) => {
+  try{
+    const allUsers = await User.find();
+    return res.status(200).send(allUsers);
+  }catch (error){
+    return res.status(400).send({ success: false, message: "Error", error: error });
+  }
 };
 
 const createUserObj = async (req) => {

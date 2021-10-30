@@ -22,7 +22,7 @@ exports.signUp = async (req, res, next) => {
     const savedAdmin = await newAdmin.save(); 
     const token = await jwt.sign({ _id: savedAdmin._id }, MASTER_KEY);
     
-    return res.status(200).send({ success: true, message: "Admin A/C created successfully!", "admin-token": token, adminId:savedAdmin._id, user: savedAdmin  });
+    return res.status(200).send({ success: true, message: "Admin A/C created successfully!", "auth-token": token, adminId:savedAdmin._id, user: savedAdmin  });
   } catch (error) {
     return res.status(400).send({ success: false, message: "Admin A/C  Creation Failed!", error: err });
   }
@@ -43,7 +43,7 @@ exports.logIn = async (req, res) => {
     // create and assign jwt
     const token = await jwt.sign({ _id: foundAdmin._id }, MASTER_KEY);
     
-    return res.status(200).header("admin-token", token).send({success: true, "admin-token": token, adminId: foundAdmin._id });
+    return res.status(200).header("auth-token", token).send({success: true, "auth-token": token, userId: foundAdmin._id });
   } catch (error) {
     return res.status(400).send({ success: false, message: error });
   }
@@ -60,51 +60,54 @@ exports.profile = async (req, res) => {
   }
   catch(error){
     
-    return res.status(400).send({ success: false, message: error });
+    return res.status(400).send({ success: false, message:"Error",error:error });
   }
 };
+
 // Update admin
 exports.updateAdmin = async (req, res) => {
   try {
 
-    req.body.password = await bcrypt.hashSync(req.body.password, 10); //encrypt the password before updating
+    if(req.body.password!=null){
+      req.body.password = await bcrypt.hashSync(req.body.password, 10);//encrypt the password before updating
+    } 
+    const emailExist = await Admin.findOne({ email: req.body.email });
+    if (emailExist){ 
+      return res.status(400).send({ success: false, message: "A User with the same Email already exists! Try another one." });
+    }
     const updatedAdmin = await Admin.findByIdAndUpdate(req.params.userId, { $set: req.body }, { new: true });
 
     if (!updatedAdmin) {
-      return res.status(400).send({ message: "Could not update. Retry." });
+      return res.status(400).send({ success: false, message: "Could not update. Retry." });
     }
-    return res.status(200).send({ message: "User updated successfully", updatedUser});
+    return res.status(200).send({success: true, message: "Successfully updated", updatedAdmin});
 
   } catch (error) {
-    return res.status(400).send({ success: false, message: error });
+    return res.status(400).send({ success: false, message: "An error has occured, unable to update", error: error });
   }
 };
 
-// Delete user
+// Delete Admin
 exports.deleteAdmin = async (req, res) => {
   try {
     const deletedAdmin = await Admin.findByIdAndDelete({ _id: req.params.userId}); // the `await` is very important here!
 
     if (!deletedAdmin) {
-      return res.status(400).send({ message: "Could not delete user" });
+      return res.status(400).send({success: false, message: "Could not delete admin" });
     }
-    return res.status(200).send({ message: "User deleted successfully", user: deletedAdmin});
+    return res.status(200).send({success: true, message: "Admin deleted successfully", user: deletedAdmin});
   } catch (error) {
-    return res.status(400).send({ success: false, message: error });
+    return res.status(400).send({ success: false, message: "An error has occurred, unable to delete Admin", error: error });
   }
 };
 
-exports.data = async (req, res) => {
+exports.viewAllAdmins = async (req, res) => {
   try{
     const allAdmin = await Admin.find();
-    return res.json({
-      allAdmin,
-      posts: {
-        title: "Admin Authentication",
-        discription: "random data you can access because you\'re authenticated",
-      },
-    });
-  }catch (error){}
+    return res.status(200).send(allAdmin);
+  }catch (error){
+    return res.status(400).send({ success: false, message: ''+error });
+  }
 };
 
 

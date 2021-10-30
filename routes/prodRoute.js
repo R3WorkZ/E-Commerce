@@ -3,7 +3,7 @@ const { date } = require("joi");
 const router = express.Router();
 const multer = require("multer");
 const ProdController = require("../controllers/prodController");
-//const { verifyUser, verifyAdmin } = require("../middleware/verifyToken");
+const { verifyAdmin } = require("../middleware/verifyToken");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -31,7 +31,7 @@ const upload = multer({
   fileFilter: fileFilter,
 });
 
-router.post("/", upload.single("productImage"), ProdController.createProduct);
+router.post("/",verifyAdmin, upload.single("productImage"), ProdController.createProduct);
 
 router.get("/show", ProdController.getProducts);
 

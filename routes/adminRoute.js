@@ -1,20 +1,22 @@
 const router = require("express").Router();
 const adminController = require("../controllers/adminController");
 const userController = require("../controllers/userController");
-const { verifyUser, verifyAdmin } = require("../middleware/verifyToken");
+const { verifyAdmin } = require("../middleware/verifyToken");
 
-router.post("/", adminController.signUp)
+router.post("/", adminController.signUp) //create admin a/c
 
-router.post("/login", adminController.logIn)
+router.post("/login", adminController.logIn) //login to admin a/c
 
-router.patch('/:userId', adminController.updateAdmin);
+router.get("/profile/:userId", verifyAdmin, adminController.profile) //view a/c data
 
-router.delete('/:userId', adminController.deleteAdmin); //delete admin
+router.patch('/:userId',verifyAdmin, adminController.updateAdmin); //update a/c data
 
-router.delete('/user/:userId', userController.deleteUser); //delete user
+router.delete('/:userId',verifyAdmin, adminController.deleteAdmin); //delete admin a/c
 
-router.get("/profile/:userId", verifyAdmin, adminController.profile)
+router.get("/viewalladmins", verifyAdmin, adminController.viewAllAdmins) //view all admins
 
-router.get("/data", verifyAdmin, adminController.data)
+router.get("/viewallusers", verifyAdmin, userController.viewAllUsers) //view all users
+
+router.delete('/user/:userId',verifyAdmin, userController.deleteUser); //delete user a/c
 
 module.exports = router;

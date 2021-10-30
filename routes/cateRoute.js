@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const cateController = require('../controllers/cateController')
-//const { verifyUser, verifyAdmin } = require("../middleware/verifyToken"); //new import
+const { verifyAdmin } = require("../middleware/verifyToken"); 
 
-router.post('/', cateController.createCategory);
+router.post('/', verifyAdmin, cateController.createCategory);
 
-router.get('/show', cateController.getCategories);
+router.get('/show', verifyAdmin, cateController.getCategories);
 
 module.exports = router;
