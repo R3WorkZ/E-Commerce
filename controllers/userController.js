@@ -15,14 +15,14 @@ exports.signUp = async (req, res, next) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const emailExist = await User.findOne({ email: req.body.email }); //returns the first document that matches the query criteria or null
-  if (emailExist) return res.status(400).send({ success: false, message: "Email already exist!" });
+  if (emailExist) return res.status(400).send({ success: false, message: "Email already exists!" });
 
   try {
     const newUser = await createUserObj(req);
     const savedUser = await User.create(newUser);
     return res.status(200).send({ success: true, message: "User created successfully!", user: savedUser });
   } catch (err) {
-    return res.status(400).send({ success: false, message: "User Creation Failed!", error: err });
+    return res.status(400).send({ success: false, message: "User creation failed!", error: err });
   }
 };
 
@@ -32,11 +32,11 @@ exports.logIn = async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   const foundUser = await User.findOne({ email: req.body.email }); //returns the first document that matches the query criteria or null
-  if (!foundUser) return res.status(400).send({ success: false, message: "invalid Email" });
+  if (!foundUser) return res.status(400).send({ success: false, message: "Invalid Email" });
 
   try {
     const isMatch = await bcrypt.compareSync(req.body.password, foundUser.password);
-    if (!isMatch) return res.status(400).send({ success: false, message: "Password Invalid" });
+    if (!isMatch) return res.status(400).send({ success: false, message: " Invalid Password" });
 
     // create and assign jwt
     const token = await jwt.sign({ _id: foundUser._id }, JWT_KEY);
