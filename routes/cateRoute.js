@@ -6,7 +6,7 @@ router.post('/', verifyAdmin, cateController.createCategory);
 
 router.get('/', verifyAdmin, cateController.getCategories);
 
-router.patch('/', verifyAdmin, cateController.editCategories);
+router.patch('/:cateId', verifyAdmin, cateController.editCategories);
 
 router.delete('/', verifyAdmin, cateController.deleteCategories);
 
