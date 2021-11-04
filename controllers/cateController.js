@@ -30,7 +30,7 @@ exports.editCategories = async (req, res, next) => {
     if (cateExists){ 
       return res.status(400).send({ success: false, message: "Category already exist!! Try another." });
     }
-    const updatedCategory = await Category.findByIdAndUpdate(req.body.name, { $set: req.body }, { new: true });
+    const updatedCategory = await Category.findOneAndUpdate(req.body.name, { $set: req.body }, { new: true });
 
     if (!updatedUser) {
       return res.status(400).send({success: false, message: "Could not update category!" });
