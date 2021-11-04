@@ -8,6 +8,6 @@ router.get('/', verifyAdmin, cateController.getCategories);
 
 router.patch('/:cateId', verifyAdmin, cateController.editCategories);
 
-router.delete('/', verifyAdmin, cateController.deleteCategories);
+router.delete('/:cateId', verifyAdmin, cateController.deleteCategories);
 
 module.exports = router;
