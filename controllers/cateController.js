@@ -32,7 +32,7 @@ exports.editCategories = async (req, res, next) => {
     }
     const updatedCategory = await Category.findByIdAndUpdate(req.params.cateId, { $set: req.body }, { new: true });
 
-    if (!updatedUser) {
+    if (!updatedCategory) {
       return res.status(400).send({success: false, message: "Could not update category!" });
     }
     return res.status(200).send({success: true, message: "Successfully updated!", updatedCategory });
