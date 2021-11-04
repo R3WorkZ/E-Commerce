@@ -38,7 +38,7 @@ exports.editCategories = async (req, res, next) => {
     return res.status(200).send({success: true, message: "Successfully updated!", updatedCategory });
 
   } catch (error) {
-    return res.status(400).send({success: false, message: "Something went wrong!", error: error });
+    return res.status(400).send({success: false, message: error, error: error });
   }
 };
 
