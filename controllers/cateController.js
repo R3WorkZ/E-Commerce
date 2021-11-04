@@ -30,7 +30,7 @@ exports.editCategories = async (req, res, next) => {
     if (cateExists){ 
       return res.status(400).send({ success: false, message: "Category already exist!! Try another." });
     }
-    const updatedCategory = await Category.findOneAndUpdate(req.body.name, { $set: req.body }, { new: true });
+    const updatedCategory = await Category.findByIdAndUpdate(req.params.cateId, { $set: req.body }, { new: true });
 
     if (!updatedUser) {
       return res.status(400).send({success: false, message: "Could not update category!" });
@@ -44,7 +44,7 @@ exports.editCategories = async (req, res, next) => {
 
 exports.deleteCategories = async (req, res, next) => {
   try {
-    const deletedCategory = await Category.findOneAndDelete(req.body.name); // the `await` is very important here!
+    const deletedCategory = await Category.findByIdAndDelete(req.params.cateId); // the `await` is very important here!
 
     if (!deletedCategory) {
       return res.status(400).send({success: false, message: "Could not delete category" });
