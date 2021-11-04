@@ -24,7 +24,7 @@ exports.getCategories = (req, res, next) => {
   });
 };
 
-exports.editCategories = (req, res, next) => {
+exports.editCategories = async (req, res, next) => {
   const dbCategory = await Category.findOne({ name: req.body.name });
   if (dbCategory) return res.status(400).send({status: false, message: "category already exist"});
 
