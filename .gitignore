@@ -38,7 +38,7 @@ bower_components
 build/Release
 
 # others
-public/
+# public/
 .timetracker
 
 # Dependency directories
