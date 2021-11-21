@@ -18,7 +18,7 @@ exports.createProduct = async (req, res, next) => {
     return res.status(200).send({ message: "Product created successfully!", product });
   } catch (error) {
     if (error.code === 11000) return res.status(200).send({ message: "product already exist" });
-    return res.status(400).send({ message: "unable to create product", error: "sdsa" + error });
+    return res.status(400).send({ message: "unable to create product", error: ''+error });
   }
 };
 
