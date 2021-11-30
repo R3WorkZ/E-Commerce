@@ -8,8 +8,9 @@ const database = mongoose.connect(
     useFindAndModify: false,
     useCreateIndex: true,
     dbName: 'ecommerce',
+    tlsInsecure: true
     // tls: true,
-    tlsCAFile: "../ca-certificate.crt"
+    // tlsCAFile: "../ca-certificate.crt"
   },
   (error) => {
     if (!error) {
