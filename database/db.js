@@ -7,7 +7,9 @@ const database = mongoose.connect(
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
-    dbName: 'ecommerce'
+    dbName: 'ecommerce',
+    // tls: true,
+    tlsCAFile: "../ca-certificate.crt"
   },
   (error) => {
     if (!error) {
