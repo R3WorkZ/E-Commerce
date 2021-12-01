@@ -9,7 +9,7 @@ const adminRoute = require("./routes/adminRoute");
 const userRoute = require("./routes/userRoute");
 
 // Use body parser middleware to parse body of incoming requests
-app.use(express.static('./public'));
+app.use('./uploads',express.static('./uploads'));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
