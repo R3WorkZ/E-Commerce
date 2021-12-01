@@ -59,7 +59,8 @@ router.post("/",verifyAdmin, upload(req,res,(err)=>{
       }
 
     })
-    newImage.save().then(()=>res.send('Success')).catch(err=>console.log(err));
+    newImage.save();
+    // .then(()=>res.send('Success')).catch(err=>console.log(err));
   }
   })
 , ProdController.createProduct);
