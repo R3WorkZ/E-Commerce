@@ -44,7 +44,7 @@ const fileSizeFormatter = (bytes) => {
 }
 
 // router.post("/",verifyAdmin, upload.single("productImage"), ProdController.createProduct);
-router.post("/",verifyAdmin, (req,res)=>{
+router.post("/",verifyAdmin,ProdController.createProduct, (req,res)=>{
   upload(req,res,(err)=>{
     if(err){
       console.log(err)
@@ -61,10 +61,10 @@ router.post("/",verifyAdmin, (req,res)=>{
 
     })
     newImage.save()
-    // .then(()=>res.send('Success')).catch(err=>console.log(err));
+    .then(()=>res.send('Success')).catch(err=>console.log(err));
   }
   })
-}, ProdController.createProduct);
+});
 
 router.get("/show", ProdController.getProducts);
 
