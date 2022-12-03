@@ -33,35 +33,7 @@ exports.getOrder = async (req, res, next) => {
     });
 };
 
-exports.getAllOrders = async (req, res, next) => {
-  // const results = await Cart.aggregate([
-  //   {
-  //     $group: {
-  //       _id: "$product",
-  //       orderSum: { $sum: "$quantity" },
-  //     },
-  //   },
-  // ])
-  //   .populate("product", "productImage name price createdAt -_id ")
-  //   .exec((err, cart) => {
-  //     if (err) return res.status(400).send({ message: "showing order", err });
-  //     return res
-  //       .status(200)
-  //       .send({ message: "showing all orders in the cart", cart });
-  //   });
 
-  res.status(200).json({
-    status: "success",
-    results,
-  });
-
-  // Cart.find({ user: req.params.userId }, '-_id quantity product')
-  //   .populate("product", "productImage name price createdAt -_id ")
-  //   .exec((err, cart) => {
-  //     if (err) return res.status(400).send({ message: "showing order", err });
-  //     return res.status(200).send({ message:"showing all orders in the cart", cart,});
-  //   });
-};
 
 function returnOrder(cart) {
   return {
